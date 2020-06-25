@@ -1,0 +1,26 @@
+import numbers
+import string
+import base64
+import binascii
+import struct
+a1=b"Burning 'em, if you ain't quick and nimble"
+b1=b"I go crazy when I hear a cymbal"
+k1=b"ICE"
+ans1=b""
+ans2=b""
+j=0
+for i in a1:
+    ans1+=bytes([i^k1[j]])
+    j+=1
+    if j==len(k1):
+        j=0
+j=0
+for i in b1:
+    ans2+=bytes([i^k1[j]])
+    j+=1
+    if j==len(k1):
+        j=0
+st1=ans1.hex()
+st2=ans2.hex()
+print(st1)
+print(st2)
