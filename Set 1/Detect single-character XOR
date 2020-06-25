@@ -1,0 +1,29 @@
+a=1
+while a==1:
+    b=input()
+    c=b''
+    c=bytes.fromhex(b)
+    p=[]
+    for i in range(128):
+        ans=b''
+        for j in c:
+            ans+=bytes([j^i])
+        character_frequencies = {
+        'a': .08167, 'b': .01492, 'c': .02782, 'd': .04253,
+        'e': .12702, 'f': .02228, 'g': .02015, 'h': .06094,
+        'i': .06094, 'j': .00153, 'k': .00772, 'l': .04025,
+        'm': .02406, 'n': .06749, 'o': .07507, 'p': .01929,
+        'q': .00095, 'r': .05987, 's': .06327, 't': .09056,
+        'u': .02758, 'v': .00978, 'w': .02360, 'x': .00150,
+        'y': .01974, 'z': .00074, ' ': .13000
+    }
+        s=sum([character_frequencies.get(chr(byte), 0) for byte in ans.lower()])
+        d={
+            'message':ans,
+            'score':s,
+            'key':i
+        }
+        p.append(d)
+    best_score=sorted(p,key=lambda x:x['score'],reverse=True)[0]
+    for i in best_score:
+        print("{}: {}".format(i.title(), best_score[i]))
