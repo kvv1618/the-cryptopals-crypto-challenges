@@ -1,0 +1,14 @@
+import base64
+def pkcs7_unpad_bytes(input_bytes): 
+    padding = input_bytes[-input_bytes[-1]:]
+    if not all(padding[byte] == len(padding) for byte in range(0, len(padding))):
+        return input_bytes
+    return input_bytes[:-input_bytes[-1]]
+with open('7.txt') as inputf:
+    cypertext=base64.b64decode(inputf.read())
+from Crypto.Cipher import AES
+key=b"YELLOW SUBMARINE"
+c=AES.new(key,AES.MODE_ECB)
+text=c.decrypt(cypertext)
+temp=pkcs7_unpad_bytes(text)
+print(temp)
