@@ -1,0 +1,16 @@
+a=input()
+b=input()
+a1=bytes.fromhex(a)
+b2=bytes.fromhex(b)
+c=b''
+for i,j in zip(a1,b2):
+    c+=bytes([i^j])
+print(c.hex())
+# cook your dish here
+a=input()
+a1=bytes.fromhex(a)
+for i in range(128):
+    x=b''
+    for j in a1:
+        x+=bytes([j^i])
+    print(x)
