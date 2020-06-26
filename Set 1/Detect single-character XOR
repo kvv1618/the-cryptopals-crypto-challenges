@@ -1,10 +1,12 @@
-a=1
-while a==1:
-    b=input()
-    c=b''
-    c=bytes.fromhex(b)
+import base64
+with open('6.txt') as input_file:
+    cypertext=input_file.read().splitlines()
+yes=[]
+for chunk in cypertext:
+    c=b""
+    c=bytes.fromhex(chunk)
     p=[]
-    for i in range(128):
+    for i in range(256):
         ans=b''
         for j in c:
             ans+=bytes([j^i])
@@ -24,6 +26,8 @@ while a==1:
             'key':i
         }
         p.append(d)
-    best_score=sorted(p,key=lambda x:x['score'],reverse=True)[0]
-    for i in best_score:
-        print("{}: {}".format(i.title(), best_score[i]))
+        best_score=sorted(p,key=lambda x:x['score'],reverse=True)[0]
+        yes.append(best_score)
+final_ans=sorted(yes,key=lambda x:x['score'],reverse=True)[0]
+for i in final_ans:
+    print("{}: {}".format(i.title(), final_ans[i]))
