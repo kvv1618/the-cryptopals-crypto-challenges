@@ -1,0 +1,6 @@
+#cook ur dish
+from Crypto.Util.Padding import pad
+a=b"YELLOW SUBMARINE"
+h=b""
+h=pad(a,20)
+print(h)
