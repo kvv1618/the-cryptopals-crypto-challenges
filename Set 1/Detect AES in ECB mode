@@ -1,53 +1,16 @@
-import base64
-from Crypto.Cipher import AES
-from Crypto.Util.Padding import pad
-def pkcs7_unpad_bytes(input_bytes): 
-    padding = input_bytes[-input_bytes[-1]:]
-    if not all(padding[byte] == len(padding) for byte in range(0, len(padding))):
-        return input_bytes
-    return input_bytes[:-input_bytes[-1]]
-with open('10.txt') as inputf:
-    cypertext=base64.b64decode(inputf.read())
-iv=b"\x00"*AES.block_size
-key=b"YELLOW SUBMARINE"
-pvb=iv
-ptxt=b""
-for i in range(0,len(cypertext),AES.block_size):
-    chunk=cypertext[i:i+AES.block_size]
-    c=AES.new(key,AES.MODE_ECB)
-    text=c.decrypt(chunk)
-    temp=pkcs7_unpad_bytes(text)
-    ans=b""
-    for j,k in zip(temp,pvb):
-        ans+=bytes([k^j])
-    ptxt+=ans
-    pvb=chunk
-ptext=pkcs7_unpad_bytes(ptxt)
-print(ptext)
-pvb=iv
-a=b"this is a test"
-pp=b""
-for i in range(0,len(a),AES.block_size):
-    chunk=a[i:i+AES.block_size]
-    h=pad(chunk,16)
-    ans=b""
-    for j,k in zip(pvb,h):
-        ans+=bytes([k^j])
-    c=AES.new(key,AES.MODE_ECB)
-    text=c.encrypt(ans)
-    pp+=text
-    pvb=text
-pvb=iv
-ptxt2=b""
-for i in range(0,len(pp),AES.block_size):
-    chunk=pp[i:i+AES.block_size]
-    c=AES.new(key,AES.MODE_ECB)
-    text=c.decrypt(chunk)
-    temp=pkcs7_unpad_bytes(text)
-    ans=b""
-    for j,k in zip(temp,pvb):
-        ans+=bytes([k^j])
-    ptxt2+=ans
-    pvb=chunk
-ptext2=pkcs7_unpad_bytes(ptxt2)
-print(ptext2)
+#cook ur dish
+cyper=[bytes.fromhex(line.strip()) for line in open('8.txt')]
+v=0
+p=[]
+for chunk in cyper:
+    v+=1
+    chunks=[chunk[i:i+16]for i in range(0,len(chunk),16)]
+    c = len(chunks) - len(set(chunks))
+    data={
+        'line':v,
+        're':c
+    }
+    p.append(data)
+result=sorted(p,key=lambda x:x['re'],reverse=True)[0]
+ans=result['line']
+print(ans)
