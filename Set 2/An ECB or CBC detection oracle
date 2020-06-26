@@ -1,0 +1,68 @@
+cook ur dish
+import os
+import random
+import base64
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
+def pkcs7_unpad_bytes(input_bytes): 
+    padding = input_bytes[-input_bytes[-1]:]
+    if not all(padding[byte] == len(padding) for byte in range(0, len(padding))):
+        return input_bytes
+    return input_bytes[:-input_bytes[-1]]
+a=b"encrypt this under random key"
+r1=random.randint(5,10)
+t1=os.urandom(r1)
+r2=random.randint(5,10)
+t2=os.urandom(r2)
+b=b""
+b=t1+a+t2
+pp=b""
+ptxt=b""
+c=random.randint(0,1)
+if c==0:
+    print("ECB")
+    key=os.urandom(16)
+    for i in range(0,len(b),AES.block_size):
+        chunk=b[i:i+AES.block_size]
+        h=pad(chunk,16)
+        c=AES.new(key,AES.MODE_ECB)
+        text=c.encrypt(h)
+        pp+=text
+    print(pp)
+    for i in range(0,len(pp),AES.block_size):
+        chunk=pp[i:i+AES.block_size]
+        c=AES.new(key,AES.MODE_ECB)
+        text=c.decrypt(chunk)
+        temp=pkcs7_unpad_bytes(text)
+        ptxt+=temp
+    ptext=pkcs7_unpad_bytes(ptxt)
+    print(ptext)
+if c==1:
+    print("CBC")
+    key=os.urandom(16)
+    iv=os.urandom(16)
+    pvb=iv
+    for i in range(0,len(b),AES.block_size):
+        chunk=b[i:i+AES.block_size]
+        h=pad(chunk,16)
+        ans=b""
+        for j,k in zip(pvb,h):
+            ans+=bytes([k^j])
+        c=AES.new(key,AES.MODE_ECB)
+        text=c.encrypt(ans)
+        pp+=text
+        pvb=text
+    print(pp)
+    pvb=iv
+    for i in range(0,len(pp),AES.block_size):
+        chunk=pp[i:i+AES.block_size]
+        c=AES.new(key,AES.MODE_ECB)
+        text=c.decrypt(chunk)
+        temp=pkcs7_unpad_bytes(text)
+        ans=b""
+        for j,k in zip(temp,pvb):
+            ans+=bytes([k^j])
+        ptxt+=ans
+        pvb=chunk
+    ptext=pkcs7_unpad_bytes(ptxt)
+    print(ptext)
